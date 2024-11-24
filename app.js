@@ -1,4 +1,10 @@
 const formBtn = document.querySelector('.form-btn');
+const removeAllBtn = document.querySelector('.remove-all-btn');
+
+removeAllBtn.addEventListener('click', function(){
+    const taskList = document.querySelectorAll('.task-container');
+    taskList.forEach(t => t.remove());
+});
 
 formBtn.addEventListener('click', function(){
     event.preventDefault();
@@ -12,7 +18,7 @@ formBtn.addEventListener('click', function(){
     console.log(taskContent);
 
     let taskContainer = document.createElement('div');
-    taskContainer.classList.add('task-container');
+    taskContainer.classList.add('task-container', 'task-container-todo');
 
     let taskItemTitle = document.createElement('div');
     taskItemTitle.classList.add('task-item-title');
@@ -42,8 +48,18 @@ formBtn.addEventListener('click', function(){
 
     container.appendChild(taskContainer);
 
+    statusCheckbox.addEventListener('change', () => changeTaskStatus(statusCheckbox));
     removeButton.addEventListener('click', () => deleteTask(removeButton));
 });
+
+function changeTaskStatus(checkbox)
+{
+    const checkboxParent = checkbox.parentNode;
+    const container = checkboxParent.parentNode;
+
+    container.classList.toggle('task-container-todo');
+    container.classList.toggle('task-container-done');
+}
 
 function deleteTask(btn)
 {

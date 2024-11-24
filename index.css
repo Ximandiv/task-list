@@ -88,8 +88,6 @@ header, footer {
 }
 
 .task-container{
-    background-color: #A9DFBF;
-    border: 0.1rem solid #229954;
     border-radius: 0.8rem;
     padding: 1rem;
     margin: 1.4rem 0;
@@ -97,6 +95,18 @@ header, footer {
     border-radius: 0.8rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+.task-container-todo{
+    background-color: #a9c7df;
+    border: 0.1rem solid #225f99;
+    transition: background-color 0.5s ease;
+}
+
+.task-container-done{
+    background-color: #A9DFBF;
+    border: 0.1rem solid #229954;
+    transition: background-color 0.5s ease;
 }
 
 .task-item-title{
@@ -135,7 +145,25 @@ header, footer {
     transition: background-color 0.25s ease;
 }
 
-.task-remove-btn:hover{
+.remove-all-btn{
+    border: 0rem;
+    border-radius: 1rem;
+    height: 2rem;
+    padding: 0 0.8rem;
+    color: white;
+    cursor: pointer;
+    background-color: #E74C3C;
+    transition: transform 0.25s ease;
+    transition: background-color 0.25s ease;
+}
+
+.remove-all{
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.task-remove-btn:hover, .remove-all-btn:hover{
     background-color: #C0392B;
     transform: scale(0.95);
 }
