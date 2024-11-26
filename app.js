@@ -17,6 +17,8 @@ container.addEventListener('click', function (element){
 container.addEventListener('change', function (element){
     if(element.target.matches(".checkbox"))
         changeTaskStatus(element.target.parentNode.parentNode);
+
+    renderAllTasks(currentFilter);
 });
 
 filterBtn.addEventListener('click', function(){
@@ -39,7 +41,7 @@ filterBtn.addEventListener('click', function(){
             break;
     }
 
-    filterByStatus(currentFilter);
+    renderAllTasks(currentFilter);
 
     filterBtn.textContent = filterDict[currentFilter];
 });
@@ -85,13 +87,20 @@ function createTaskElement(taskId, taskTitle, taskContent, status)
 
     let taskItemStatus = document.createElement('div');
     taskItemStatus.classList.add('task-item-status');
+
     let statusCheckbox = document.createElement('input');
     statusCheckbox.setAttribute('type', 'checkbox');
+
+    if(status === "done")
+        statusCheckbox.checked = true;
+
     statusCheckbox.classList.add('checkbox');
     taskItemStatus.appendChild(statusCheckbox);
+
     let statusLabel = document.createElement('label');
     statusLabel.textContent = "Done";
     taskItemStatus.appendChild(statusLabel);
+
     let removeButton = document.createElement('button');
     removeButton.classList.add('task-remove-btn');
     removeButton.textContent = "Remove";
@@ -102,6 +111,20 @@ function createTaskElement(taskId, taskTitle, taskContent, status)
     taskContainer.appendChild(taskItemStatus);
 
     container.appendChild(taskContainer);
+}
+
+function renderAllTasks(targetStatus)
+{
+    container.replaceChildren();
+
+    let taskListToShow = [];
+    if(targetStatus !== "all"){
+        taskListToShow = taskList.filter(t => t.status === targetStatus);
+    } else{
+        taskListToShow = taskList;
+    }
+
+    taskListToShow.forEach(t => createTaskElement(t.id, t.content.title, t.content.text, t.status));
 }
 
 function changeTaskStatus(task)
@@ -116,20 +139,6 @@ function deleteTask(task)
 {
     taskList.splice(task.dataset.id, 1);
     task.remove();
-}
-
-function filterByStatus(targetStatus)
-{
-    container.replaceChildren();
-
-    let taskListToShow = [];
-    if(targetStatus !== "all"){
-        taskListToShow = taskList.filter(t => t.status === targetStatus);
-    } else{
-        taskListToShow = taskList;
-    }
-
-    taskListToShow.forEach(t => createTaskElement(t.id, t.content.title, t.content.text, t.status));
 }
 
 function setStatus(task)
