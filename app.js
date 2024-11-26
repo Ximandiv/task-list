@@ -32,6 +32,7 @@ filterBtn.addEventListener('click', function(){
             filterBtn.classList.toggle("todo-filter-color");
             break;
         case "todo":
+        default:
             currentFilter = "all";
             filterBtn.classList.toggle("todo-filter-color");
             filterBtn.classList.toggle("all-filter-color");
@@ -45,6 +46,7 @@ filterBtn.addEventListener('click', function(){
 
 removeAllBtn.addEventListener('click', function(){
     container.replaceChildren();
+    taskList.length = 0;
 });
 
 formBtn.addEventListener('click', function(){
@@ -56,9 +58,21 @@ formBtn.addEventListener('click', function(){
 
     const taskTitle = document.querySelector('#task-title').value;
     const taskContent = document.querySelector('#task-content').value;
+    const taskStatus = "todo";
 
+    createTaskElement(taskId, taskTitle, taskContent, taskStatus);
+    taskList.push( { id: taskId, content: { title: taskTitle, text: taskContent }, status: taskStatus } );
+});
+
+function createTaskElement(taskId, taskTitle, taskContent, status)
+{
     let taskContainer = document.createElement('div');
-    taskContainer.classList.add('task-container', 'task-container-todo');
+
+    if(status === "todo")
+        taskContainer.classList.add('task-container', 'task-container-todo');
+    else
+    taskContainer.classList.add('task-container', 'task-container-done');
+
     taskContainer.dataset.id = taskId;
 
     let taskItemTitle = document.createElement('div');
@@ -88,8 +102,7 @@ formBtn.addEventListener('click', function(){
     taskContainer.appendChild(taskItemStatus);
 
     container.appendChild(taskContainer);
-    taskList.push( { id: taskId, content: taskContainer, status: "todo" } );
-});
+}
 
 function changeTaskStatus(task)
 {
@@ -116,7 +129,7 @@ function filterByStatus(targetStatus)
         taskListToShow = taskList;
     }
 
-    taskListToShow.forEach(t => container.appendChild(t.content));
+    taskListToShow.forEach(t => createTaskElement(t.id, t.content.title, t.content.text, t.status));
 }
 
 function setStatus(task)
