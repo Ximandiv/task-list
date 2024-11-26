@@ -1,12 +1,44 @@
+const maxTasksAmount = 25;
+
 const taskList = [];
 const filterDict = { "all": "All Tasks", "done": "Tasks Done", "todo": "Tasks To-Do" };
 let currentFilter = "all";
+
+const taskTitleWarnMsg = "Title must be lower than 20 characters including spaces. Only letters and numbers allowed.";
+const taskContentWarnMsg = "Content must be lower than 40 characters including spaces. Only letters and numbers allowed.";
+const taskAmountWarnMsg = "Too many tasks were created, maximum 25. Delete some to have some!";
+
+const maxTaskTitleLen = 20;
+const maxTaskContLen = 40;
+
+const formTitleWarn = document.querySelector('.warn-task-title');
+const formContentWarn = document.querySelector('.warn-task-content');
+const formTaskWarn = document.querySelector('.warn-task-amount');
+
+const alphaNumRegex = /^[a-zA-Z0-9]*$/;
+
+const taskTitleInput = document.querySelector('.task-title-input');
+const taskContentInput = document.querySelector('.task-content-input');
 
 const container = document.querySelector('.flex-container');
 
 const formBtn = document.querySelector('.form-btn');
 const filterBtn = document.querySelector('.all-filter');
 const removeAllBtn = document.querySelector('.remove-all-btn');
+
+taskTitleInput.addEventListener('input', function(){
+    if(!isAlphaNumTextValid(taskTitleInput.value, maxTaskTitleLen))
+        formTitleWarn.textContent = taskTitleWarnMsg;
+    else
+        formTitleWarn.textContent = "";
+});
+
+taskContentInput.addEventListener('input', function(){
+    if(!isAlphaNumTextValid(taskTitleInput.value, maxTaskTitleLen))
+        formContentWarn.textContent = taskContentWarnMsg;
+    else
+        formContentWarn.textContent = "";
+});
 
 container.addEventListener('click', function (element){
     if(element.target.matches(".task-remove-btn")){
@@ -58,13 +90,33 @@ formBtn.addEventListener('click', function(){
     if(taskList.length !== 0)
         taskId = taskList.length;
 
-    const taskTitle = document.querySelector('#task-title').value;
-    const taskContent = document.querySelector('#task-content').value;
+    const taskTitle = taskTitleInput.value;
+    const taskContent = taskContentInput.value;
     const taskStatus = "todo";
+
+    if(!isAlphaNumTextValid(taskTitle) && !isAlphaNumTextValid(taskContent))
+        return;
+
+    if(taskList.length >= maxTasksAmount){
+        formTaskWarn.textContent = taskAmountWarnMsg;
+        return;
+    }
+
+    formTaskWarn.textContent = "";
 
     createTaskElement(taskId, taskTitle, taskContent, taskStatus);
     taskList.push( { id: taskId, content: { title: taskTitle, text: taskContent }, status: taskStatus } );
 });
+
+function isAlphaNumTextValid(prop, maxLength)
+{
+    let valid = true;
+    if(prop.length > maxLength || !alphaNumRegex.test(prop)){
+        valid = false;
+    }
+    
+    return valid;
+}
 
 function createTaskElement(taskId, taskTitle, taskContent, status)
 {
