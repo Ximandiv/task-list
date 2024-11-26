@@ -1,24 +1,65 @@
+const taskList = [];
+const filterDict = { "all": "All Tasks", "done": "Tasks Done", "todo": "Tasks To-Do" };
+let currentFilter = "all";
+
+const container = document.querySelector('.flex-container');
+
 const formBtn = document.querySelector('.form-btn');
+const filterBtn = document.querySelector('.all-filter');
 const removeAllBtn = document.querySelector('.remove-all-btn');
 
+container.addEventListener('click', function (element){
+    if(element.target.matches(".task-remove-btn")){
+        deleteTask(element.target.parentNode.parentNode);
+    }
+});
+
+container.addEventListener('change', function (element){
+    if(element.target.matches(".checkbox"))
+        changeTaskStatus(element.target.parentNode.parentNode);
+});
+
+filterBtn.addEventListener('click', function(){
+    switch(currentFilter){
+        case "all":
+            currentFilter = "done";
+            filterBtn.classList.toggle("all-filter-color");
+            filterBtn.classList.toggle("done-filter-color");
+            break;
+        case "done":
+            currentFilter = "todo";
+            filterBtn.classList.toggle("done-filter-color");
+            filterBtn.classList.toggle("todo-filter-color");
+            break;
+        case "todo":
+            currentFilter = "all";
+            filterBtn.classList.toggle("todo-filter-color");
+            filterBtn.classList.toggle("all-filter-color");
+            break;
+    }
+
+    filterByStatus(currentFilter);
+
+    filterBtn.textContent = filterDict[currentFilter];
+});
+
 removeAllBtn.addEventListener('click', function(){
-    const taskList = document.querySelectorAll('.task-container');
-    taskList.forEach(t => t.remove());
+    container.replaceChildren();
 });
 
 formBtn.addEventListener('click', function(){
     event.preventDefault();
 
-    const container = document.querySelector('.flex-container');
+    let taskId = 0;
+    if(taskList.length !== 0)
+        taskId = taskList.length;
 
     const taskTitle = document.querySelector('#task-title').value;
     const taskContent = document.querySelector('#task-content').value;
 
-    console.log(taskTitle);
-    console.log(taskContent);
-
     let taskContainer = document.createElement('div');
     taskContainer.classList.add('task-container', 'task-container-todo');
+    taskContainer.dataset.id = taskId;
 
     let taskItemTitle = document.createElement('div');
     taskItemTitle.classList.add('task-item-title');
@@ -47,26 +88,41 @@ formBtn.addEventListener('click', function(){
     taskContainer.appendChild(taskItemStatus);
 
     container.appendChild(taskContainer);
-
-    statusCheckbox.addEventListener('change', () => changeTaskStatus(statusCheckbox));
-    removeButton.addEventListener('click', () => deleteTask(removeButton));
+    taskList.push( { id: taskId, content: taskContainer, status: "todo" } );
 });
 
-function changeTaskStatus(checkbox)
+function changeTaskStatus(task)
 {
-    const checkboxParent = checkbox.parentNode;
-    const container = checkboxParent.parentNode;
+    setStatus(taskList[task.dataset.id]);
 
-    container.classList.toggle('task-container-todo');
-    container.classList.toggle('task-container-done');
+    task.classList.toggle('task-container-todo');
+    task.classList.toggle('task-container-done');
 }
 
-function deleteTask(btn)
+function deleteTask(task)
 {
-    btn.removeEventListener('click', () => deleteTask(btn));
+    taskList.splice(task.dataset.id, 1);
+    task.remove();
+}
 
-    const btnParent = btn.parentNode;
-    const container = btnParent.parentNode;
+function filterByStatus(targetStatus)
+{
+    container.replaceChildren();
 
-    container.remove();
+    let taskListToShow = [];
+    if(targetStatus !== "all"){
+        taskListToShow = taskList.filter(t => t.status === targetStatus);
+    } else{
+        taskListToShow = taskList;
+    }
+
+    taskListToShow.forEach(t => container.appendChild(t.content));
+}
+
+function setStatus(task)
+{
+    if(task.status === "todo")
+        task.status = "done";
+    else
+        task.status = "todo";
 }
