@@ -34,7 +34,7 @@ taskTitleInput.addEventListener('input', function(){
 });
 
 taskContentInput.addEventListener('input', function(){
-    if(!isAlphaNumTextValid(taskTitleInput.value, maxTaskTitleLen))
+    if(!isAlphaNumTextValid(taskContentInput.value, maxTaskTitleLen))
         formContentWarn.textContent = taskContentWarnMsg;
     else
         formContentWarn.textContent = "";
