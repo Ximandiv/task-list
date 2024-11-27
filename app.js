@@ -45,7 +45,7 @@ taskTitleInput.addEventListener('input', function(){
 taskContentInput.addEventListener('input', function(){
     if(!isAlphaNumTextValid(taskContentInput.value, maxTaskContLen))
         formContentWarn.textContent = taskContentWarnMsg;
-    else if(!isFormTextLenValid(taskContentInput.value, minTaskContLen))
+    else if(taskContentInput.value.length !== 0 && !isFormTextLenValid(taskContentInput.value, minTaskContLen))
         formContentWarn.textContent = taskContentEmptyMsg;
     else
         formContentWarn.textContent = "";
@@ -91,7 +91,9 @@ formBtn.addEventListener('click', function(){
     let isTextTitleFormatValid = isAlphaNumTextValid(taskTitleInput.value);
     let isTextContFormatValid = isAlphaNumTextValid(taskContentInput.value);
     let isTextTitleLenValid = isFormTextLenValid(taskTitleInput.value, minTaskTitleLen);
-    let isTextContLenValid = isFormTextLenValid(taskContentInput.value, minTaskContLen);
+    let isTextContLenValid = taskContentInput.value.length !== 0
+                            ? isFormTextLenValid(taskContentInput.value, minTaskContLen)
+                            : true;
 
     if(validateInput(
         isTextTitleFormatValid,
@@ -191,8 +193,8 @@ function createTaskElement(taskId, taskTitle, taskContent, status)
 
     let statusCheckbox = document.createElement('input');
     statusCheckbox.setAttribute('type', 'checkbox');
-    statusCheckbox.setAttribute('name', 'status-check');
-    statusCheckbox.id = "status-check";
+    statusCheckbox.setAttribute('name', 'status-check-' + taskId);
+    statusCheckbox.id = "status-check-" + taskId;
 
     if(status === "done")
         statusCheckbox.checked = true;
@@ -201,7 +203,7 @@ function createTaskElement(taskId, taskTitle, taskContent, status)
     taskItemStatus.appendChild(statusCheckbox);
 
     let statusLabel = document.createElement('label');
-    statusLabel.setAttribute("for", "status-check");
+    statusLabel.setAttribute("for", "status-check-" + taskId);
     statusLabel.textContent = "Done";
     taskItemStatus.appendChild(statusLabel);
 
