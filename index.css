@@ -23,7 +23,8 @@ header, footer {
 }
 
 .form-section{
-    background-color: #FAEBD7;
+    background-color: #e9f7fe;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 1.5rem auto;
     padding: 1.2rem;
     border-radius: 0.8rem;
@@ -70,12 +71,13 @@ header, footer {
     padding: 0 0.8rem;
     margin-top: 1rem;
     cursor: pointer;
-    background-color: #F1C40F;
+    background-color: #ffc107;
+    color: white;
     transition: transform 0.25s ease;
     transition: background-color 0.25s ease;
 }
 .form-btn:hover{
-    background-color: #D4AC0D;
+    background-color: #e0a800;
     transform: scale(0.95);
 }
 
@@ -91,29 +93,28 @@ header, footer {
     transform: scale(0.95);
 }
 .all-filter-color{
-    background-color: rgb(163, 163, 163);
+    background-color: #007bff;
     color: white;
-    transition: color 0.5s ease;
     transition: background-color 0.5s ease;
 }
 .all-filter-color:hover{
-    background-color: rgb(110, 110, 110);
+    background-color: #0056b3;
 }
 .todo-filter-color{
-    background-color: #a9c7df;
+    background-color: #fd7e14;
+    color: white;
     transition: background-color 0.5s ease;
 }
 .todo-filter-color:hover{
-    background-color: #8ba5bb;
+    background-color: #e46c12;
 }
 .done-filter-color{
-    background-color: #229954;
+    background-color: #28a745;
     color: white;
-    transition: color 0.5s ease;
     transition: background-color 0.5s ease;
 }
 .done-filter-color:hover{
-    background-color: #17753e;;
+    background-color: #218838;
 }
 
 .flex-container{
@@ -128,6 +129,7 @@ header, footer {
     justify-content: space-evenly;
     align-items: center;
     background-color: lightgray;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .task-container{
@@ -138,6 +140,7 @@ header, footer {
     border-radius: 0.8rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .task-container-todo{
