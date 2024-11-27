@@ -22,7 +22,13 @@
 
         <form class="task-form">
             <label for="task-title" name="task-title">Title</label>
-            <input type="text" class="task-title-input" id="task-title" name="task-title" required>
+            <input 
+                type="text" 
+                class="task-title-input" 
+                id="task-title" 
+                name="task-title" 
+                placeholder="Your Task Title"
+                required>
             <span class="val-test warn-task-title"></span>
             
             <label for="task-content" name="task-content">Content</label>
@@ -32,6 +38,7 @@
                 name="task-content" 
                 rows="6"
                 cols="50"
+                placeholder="Your Task Content"
                 required></textarea>
             <span class="val-test warn-task-content"></span>
 

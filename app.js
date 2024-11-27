@@ -7,7 +7,7 @@ let currentFilter = "all";
 const taskTitleWarnMsg = "Title must be lower than 20 characters including spaces. Only letters and numbers allowed.";
 const taskTitleEmptyMsg = "Title must be at least 3 alphanumeric characters.";
 
-const taskContentWarnMsg = "Content must be lower than 40 characters including spaces. Only letters and numbers allowed.";
+const taskContentWarnMsg = "Content must be lower than 50 characters including spaces. Only letters and numbers allowed.";
 const taskContentEmptyMsg = "Content must be at least 2 alphanumeric characters.";
 
 const taskAmountWarnMsg = "Too many tasks were created, maximum 25. Delete some to have some!";
@@ -16,13 +16,13 @@ const minTaskTitleLen = 3;
 const maxTaskTitleLen = 20;
 
 const minTaskContLen = 2;
-const maxTaskContLen = 40;
+const maxTaskContLen = 50;
 
 const formTitleWarn = document.querySelector('.warn-task-title');
 const formContentWarn = document.querySelector('.warn-task-content');
 const formTaskWarn = document.querySelector('.warn-task-amount');
 
-const alphaNumRegex = /^[a-zA-Z0-9]*$/;
+const alphaNumRegex = /^[a-zA-Z0-9 ]*$/;
 
 const taskTitleInput = document.querySelector('.task-title-input');
 const taskContentInput = document.querySelector('.task-content-input');
@@ -43,7 +43,7 @@ taskTitleInput.addEventListener('input', function(){
 });
 
 taskContentInput.addEventListener('input', function(){
-    if(!isAlphaNumTextValid(taskContentInput.value, maxTaskTitleLen))
+    if(!isAlphaNumTextValid(taskContentInput.value, maxTaskContLen))
         formContentWarn.textContent = taskContentWarnMsg;
     else if(!isFormTextLenValid(taskContentInput.value, minTaskContLen))
         formContentWarn.textContent = taskContentEmptyMsg;
@@ -88,10 +88,16 @@ formBtn.addEventListener('click', function(){
     if(taskList.length !== 0)
         taskId = taskList.length;
 
-    let isTextFormatValid = isAlphaNumTextValid(taskTitleInput.value) && isAlphaNumTextValid(taskContentInput.value);
-    let isTextLenValid = isFormTextLenValid(taskTitleInput.value, minTaskTitleLen) && isFormTextLenValid(taskContentInput.value, minTaskContLen);
+    let isTextTitleFormatValid = isAlphaNumTextValid(taskTitleInput.value);
+    let isTextContFormatValid = isAlphaNumTextValid(taskContentInput.value);
+    let isTextTitleLenValid = isFormTextLenValid(taskTitleInput.value, minTaskTitleLen);
+    let isTextContLenValid = isFormTextLenValid(taskContentInput.value, minTaskContLen);
 
-    if(!isTextFormatValid || !isTextLenValid)
+    if(validateInput(
+        isTextTitleFormatValid,
+        isTextContFormatValid,
+        isTextTitleLenValid,
+        isTextContLenValid))
         return;
 
     const taskTitle = taskTitleInput.value.trim();
@@ -112,6 +118,30 @@ formBtn.addEventListener('click', function(){
     else
         renderTasksByStatus(currentStatus);
 });
+
+function validateInput(isTextTitleFormatValid,
+    isTextContFormatValid,
+    isTextTitleLenValid,
+    isTextContLenValid)
+{
+    let hasValidationErrors = !isTextTitleFormatValid 
+                            || !isTextContFormatValid
+                            || !isTextTitleLenValid
+                            || !isTextContLenValid;
+    if(!isTextTitleFormatValid)
+        formTitleWarn.textContent = taskTitleWarnMsg;
+
+    if(!isTextContFormatValid)
+        formContentWarn.textContent = taskContentWarnMsg;
+
+    if(!isTextTitleLenValid)
+        formTitleWarn.textContent = taskTitleEmptyMsg;
+
+    if(!isTextContLenValid)
+        formContentWarn.textContent = taskContentEmptyMsg;
+
+    return hasValidationErrors;
+}
 
 function sortTaskList()
 {
